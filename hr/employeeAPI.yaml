@@ -1,0 +1,42 @@
+openapi: 3.0.1
+info:
+  title: Employee API
+  description: This api is used to connect to the EmployeeAPI1 service
+  version: v1.0
+servers:
+  - url: https://run.mocky.io/v3/00e59b8a-9e67-4bea-98f9-7213cf8b6553
+paths:
+  /employee/{employeeId}:
+    get:
+      parameters:
+        - name: employeeId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: ok
+  /employees:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: ok
+    post:
+      parameters: []
+      responses:
+        '200':
+          description: ok
+components:
+  securitySchemes:
+    default:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://test.com
+          scopes: {}
+          x-scopes-bindings: {}         
