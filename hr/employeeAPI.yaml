@@ -1,42 +1,122 @@
 openapi: 3.0.1
 info:
-  title: Employee API
-  description: This api is used to connect to the EmployeeAPI1 service
-  version: v1.0
+  title: Mock Employee API
+  version: 1.0.0
+  description: A simple mock employee API service
 servers:
-  - url: https://run.mocky.io/v3/00e59b8a-9e67-4bea-98f9-7213cf8b6553
+  - url: https://1c632c6b-a713-4b7e-b9cc-553853e59590-dev.e1-us-east-azure.choreoapis.dev/hr/employee-backend/v1.0
+    description: Local server
+
 paths:
-  /employee/{employeeId}:
-    get:
-      parameters:
-        - name: employeeId
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: string
-      responses:
-        '200':
-          description: ok
   /employees:
     get:
-      parameters: []
+      summary: Get all employees
       responses:
         '200':
-          description: ok
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Employee'
     post:
-      parameters: []
+      summary: Create a new employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+
+  /employees/{id}:
+    get:
+      summary: Get a specific employee by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The employee ID
       responses:
         '200':
-          description: ok
+          description: The employee data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update an existing employee
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The employee ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete an employee
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The employee ID
+      responses:
+        '204':
+          description: Employee deleted
+        '404':
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
-  securitySchemes:
-    default:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://test.com
-          scopes: {}
-          x-scopes-bindings: {}         
+  schemas:
+    Employee:
+      type: object
+      properties:
+        name:
+          type: string
+        position:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
